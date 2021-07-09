@@ -195,7 +195,7 @@ class BLEAdapter(BLEDriverObserver):
             self.driver.ble_gap_connect(
                 address=address, scan_params=scan_params, conn_params=conn_params
             )
-        elif nrf_sd_ble_api_ver == 5:
+        elif nrf_sd_ble_api_ver >= 5:
             self.driver.ble_gap_connect(
                 address=address,
                 scan_params=scan_params,
@@ -248,6 +248,17 @@ class BLEAdapter(BLEDriverObserver):
             return
 
         return response
+
+    def qos_channel_survey_start(self, conn_handle, interval_us):
+        try:
+            self.driver.ble_gap_qos_channel_survey_start(interval_us)
+        except NordicSemiException as ex:
+            raise ex
+
+        response = self.evt_sync[conn_handle].wait(evt=BLEEvtID.gap_evt_qos_ch_report)
+
+        return response
+
 
     def data_length_update(self, conn_handle, data_length):
         try:
@@ -714,6 +725,11 @@ class BLEAdapter(BLEDriverObserver):
     def on_gap_evt_phy_update(self, ble_driver, conn_handle, **kwargs):
         self.evt_sync[conn_handle].notify(
             evt=BLEEvtID.gap_evt_phy_update, data=kwargs
+        )
+
+    def on_gap_evt_qos_ch_report(self, ble_driver, conn_handle, **kwargs):
+        self.evt_sync[conn_handle].notify(
+            evt=BLEEvtID.gap_evt_qos_ch_report, data=kwargs
         )
 
     def on_evt_tx_complete(self, ble_driver, conn_handle, **kwargs):

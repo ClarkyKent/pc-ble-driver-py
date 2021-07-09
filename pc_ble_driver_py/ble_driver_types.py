@@ -44,6 +44,8 @@ if nrf_sd_ble_api_ver == 2:
     import pc_ble_driver_py.lib.nrf_ble_driver_sd_api_v2 as ble_driver
 elif nrf_sd_ble_api_ver == 5:
     import pc_ble_driver_py.lib.nrf_ble_driver_sd_api_v5 as ble_driver
+elif nrf_sd_ble_api_ver == 6:
+    import pc_ble_driver_py.lib.nrf_ble_driver_sd_api_v6 as ble_driver
 else:
     raise NordicSemiException(
         "SoftDevice API {} not supported".format(nrf_sd_ble_api_ver)
@@ -76,6 +78,12 @@ def char_array_to_list(array_pointer, length):
 def uint8_array_to_list(array_pointer, length):
     """Convert uint8_array to python list."""
     data_array = ble_driver.uint8_array.frompointer(array_pointer)
+    data_list = _populate_list(data_array, length)
+    return data_list
+
+def int8_array_to_list(array_pointer, length):
+    """Convert int8_array to python list."""
+    data_array = ble_driver.int8_array.frompointer(array_pointer)
     data_list = _populate_list(data_array, length)
     return data_list
 

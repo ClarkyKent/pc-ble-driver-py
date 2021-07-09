@@ -343,6 +343,14 @@ class BLEDriverObserver(object):
             )
         )
 
+    def on_gap_evt_qos_ch_report(self, ble_driver, conn_handle, channel_energy):
+        logger.debug(
+            "evt> on_gap_evt_qos_ch_report conn({})\n"
+            "ch_report({})\n ".format(
+                conn_handle, channel_energy
+            )
+        )
+
 
 class BLEAdapterObserver(object):
     """

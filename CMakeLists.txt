@@ -20,7 +20,7 @@ set(NRF_BLE_DRIVER_VERSION "4.1.4")
 # There is no reason to compile more than two SoftDevice API versions
 # The Python module only supports one SoftDevice API
 # version for NRF51 and one for NRF52
-set(SD_API_VERS "2;5")
+set(SD_API_VERS "2;5;6")
 
 # SWIG
 find_package(SWIG REQUIRED)
